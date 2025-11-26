@@ -1,6 +1,6 @@
 import os
 import config
-
+from google.genai import types
 
 def get_file_content(working_directory, file_path):
     abs_working_dir = os.path.abspath(working_directory)
@@ -22,3 +22,21 @@ def get_file_content(working_directory, file_path):
                 return file_content_string
     except Exception as e:
         return f"Error: {e}"
+
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="Gets the content of the file specified up to 10000 characters and appends a message if the content is longer than 10000 characters after truncating it.",  
+        parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "working_directory": types.Schema(
+                type=types.Type.STRING,
+                description="The directory to get the file content from  from, relative to the working directory. If not provided, it looks for the file in the working directory.",
+            ),
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to get the content from."
+            )
+        },
+    ),
+)
